@@ -1,0 +1,38 @@
+ciphertext = """53‡‡†305))6*;4826)4‡.)4‡);806*;48†8¶60))85;;]8*;:‡*8†83 (88)5*†;46(;88*96*?;8)*‡(;485);5*†2:*‡(;4956*2(5*—4)8¶8* ;4069285);)6†8)4‡‡;1(‡9;48081;8:8‡1;48†85;4)485†528806*81 (‡9;48;(88;4(‡?34;48)4‡;161;:188;‡?;""".replace("\n", "")
+mapping = {
+    '5': 'E',
+    '3': 'T',
+    '0': 'H',
+    '8': 'O',
+    '6': 'N',
+    '*': 'S',
+    ')': 'I',
+    '(': 'R',
+    '4': 'A',
+    '2': 'D',
+    '1': 'L',
+    ';': 'C',
+    ':': 'M',
+    '?': 'F',
+    ']': 'P',
+    '—': 'G',
+    '¶': 'U'
+    # UNMAPPED symbols like ‡ † remain as-is
+}
+
+def apply_mapping(text, mp):
+    result = ""
+    for ch in text:
+        if ch in mp:
+            result += mp[ch]
+        else:
+            result += ch  # leave symbol unchanged
+    return result
+
+decrypted = apply_mapping(ciphertext, mapping)
+
+# -------------------------------------------------
+# PRINT EXACT STYLE LIKE YOUR SCREENSHOT
+# -------------------------------------------------
+print("Decrypted Output (partially mapped):\n")
+print(decrypted)
