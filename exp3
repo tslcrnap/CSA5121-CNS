@@ -1,0 +1,31 @@
+def is_valid_key(key):
+    key = key.upper()
+    return len(key) == 26 and len(set(key)) == 26 and key.isalpha()
+
+def monoalphabetic_encrypt(plaintext, key):
+    key = key.upper()
+    ciphertext = ""
+    
+    for char in plaintext:
+        if char.isalpha():
+            if char.isupper():
+                index = ord(char) - ord('A')
+                ciphertext += key[index]
+            else:
+                index = ord(char) - ord('a')
+                ciphertext += key[index].lower()
+        else:
+            ciphertext += char  # Keep non-letters unchanged
+
+    return ciphertext
+
+
+# ------------------- MAIN PROGRAM -------------------
+key = input("Enter 26-letter substitution key: ")
+
+if not is_valid_key(key):
+    print("Invalid key! Must be 26 UNIQUE letters A-Z.")
+else:
+    plaintext = input("Enter the plaintext: ")
+    ciphertext = monoalphabetic_encrypt(plaintext, key)
+    print("Ciphertext:", ciphertext)
