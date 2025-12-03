@@ -1,0 +1,57 @@
+# Function to find modular inverse
+def mod_inverse(a, m=26):
+    for x in range(26):
+        if (a * x) % m == 1:
+            return x
+    return None
+
+
+# Affine decryption function
+def affine_decrypt(cipher, a, b):
+    cipher = cipher.upper()
+    a_inv = mod_inverse(a)
+    result = ""
+
+    for ch in cipher:
+        if ch.isalpha():
+            c = ord(ch) - 65
+            p = (a_inv * (c - b)) % 26
+            result += chr(p + 65)
+        else:
+            result += ch
+    return result
+
+
+# ------------------------------
+# Frequency-based key recovery
+# ------------------------------
+
+# Given:
+# Most frequent ciphertext letter = B -> 1
+# Second most frequent ciphertext letter = U -> 20
+# We map them to English: E = 4, T = 19
+E, T = 4, 19
+B, U = 1, 20
+
+# Solve equation:
+# (U - B) = a * (T - E) mod 26
+num = (U - B) % 26
+den = (T - E) % 26
+den_inv = mod_inverse(den)
+
+a = (num * den_inv) % 26      # recovered a
+b = (B - a * E) % 26          # recovered b
+
+# ------------------------------
+# Get ciphertext from user
+# ------------------------------
+ciphertext = input("Enter ciphertext: ")
+
+# Decrypt using recovered key
+plaintext = affine_decrypt(ciphertext, a, b)
+
+# ------------------------------
+# Print output as in screenshot
+# ------------------------------
+print(f"\nRecovered Key: a = {a}, b = {b}")
+print(f"Decrypted Text:  {plaintext}")
