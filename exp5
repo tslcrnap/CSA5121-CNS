@@ -1,0 +1,53 @@
+import math
+
+# Function to compute modular inverse of a mod 26
+def mod_inverse(a):
+    for x in range(26):
+        if (a * x) % 26 == 1:
+            return x
+    return None
+
+
+def encrypt_affine(text, a, b):
+    text = text.upper()
+    result = ""
+
+    for ch in text:
+        if ch.isalpha():
+            p = ord(ch) - 65
+            c = (a * p + b) % 26
+            result += chr(c + 65)
+        else:
+            result += ch
+    return result
+
+
+def decrypt_affine(cipher, a, b):
+    cipher = cipher.upper()
+    result = ""
+
+    # Find modular inverse of a
+    a_inv = mod_inverse(a)
+    if a_inv is None:
+        return "Decryption impossible — 'a' has no modular inverse!"
+
+    for ch in cipher:
+        if ch.isalpha():
+            c = ord(ch) - 65
+            p = (a_inv * (c - b)) % 26
+            result += chr(p + 65)
+        else:
+            result += ch
+    return result
+
+
+# ---- Main Program ----
+plaintext = input("Enter plaintext: ")
+a = int(input("Enter value of a: "))
+b = int(input("Enter value of b: "))
+
+cipher = encrypt_affine(plaintext, a, b)
+print("Encrypted Text:", cipher)
+
+decrypted = decrypt_affine(cipher, a, b)
+print("Decrypted Text:", decrypted)
