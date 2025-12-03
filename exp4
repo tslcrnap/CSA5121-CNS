@@ -1,0 +1,56 @@
+
+def generate_key(text, key):
+    key = key.upper()
+    text = text.upper()
+    key_list = list(key)
+
+    # Repeat key to match plaintext length
+    while len(key_list) < len(text):
+        key_list.append(key_list[len(key_list) % len(key)])
+
+    return "".join(key_list)
+
+
+def encrypt(text, key):
+    text = text.upper()
+    key = key.upper()
+    encrypted = ""
+
+    for t, k in zip(text, key):
+        if t.isalpha():
+            shift = (ord(t) - 65 + ord(k) - 65) % 26
+            encrypted += chr(shift + 65)
+        else:
+            encrypted += t
+    return encrypted
+
+
+def decrypt(cipher, key):
+    cipher = cipher.upper()
+    key = key.upper()
+    decrypted = ""
+
+    for c, k in zip(cipher, key):
+        if c.isalpha():
+            shift = (ord(c) - 65 - (ord(k) - 65)) % 26
+            decrypted += chr(shift + 65)
+        else:
+            decrypted += c
+    return decrypted
+
+
+# ---- Main Program ----
+plaintext = input("Enter plaintext: ").upper()
+key = input("Enter key word: ").upper()
+
+# Generate full-length key
+full_key = generate_key(plaintext, key)
+
+ciphertext = encrypt(plaintext, full_key)
+print("Generated Key:", full_key)
+print("Encrypted Text:", ciphertext)
+
+choice = input("Do you want to decrypt it? (yes/no): ").lower()
+if choice == "yes":
+    decrypted_text = decrypt(ciphertext, full_key)
+    print("Decrypted Text:", decrypted_text)
